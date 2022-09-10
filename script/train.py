@@ -2,11 +2,9 @@ import os
 import argparse
 import numpy as np
 
-from torchlight.utils import instantiate_from, locate
+from torchlight.utils import instantiate, locate
 from torchlight.nn.utils import adjust_learning_rate, get_learning_rate
 
-import hsir.model
-import hsir.scheduler
 import hsir.data.dataloader as loaders
 from hsir.trainer import Trainer
 from hsir.scheduler import MultiStepSetLR
@@ -35,7 +33,7 @@ def train_cfg():
 
 def main():
     cfg = train_cfg()
-    net = instantiate_from(hsir.model, cfg.arch)
+    net = instantiate(cfg.arch)
     schedule = locate(cfg.schedule)
     trainer = Trainer(
         net,

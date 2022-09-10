@@ -244,9 +244,9 @@ class Trainer:
         self.logger.log('Epoch {} | {}'.format(self.epoch, tracker.summary()))
         return tracker.result()
 
-    def load(self, name=None, load_opt=True):
-        if name is None: name = 'model_latest.pth'
-        resume_path = join(self.save_dir, name)
+    def load(self, resume_path=None, load_opt=True):
+        if resume_path is None:
+            resume_path = join(self.save_dir, 'model_latest.pth')
 
         self.logger.print('==> Resuming from checkpoint %s..' % resume_path)
         checkpoint = torch.load(resume_path)
