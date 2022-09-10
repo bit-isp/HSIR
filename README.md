@@ -1,6 +1,6 @@
 # HSIR
 
-![PyPI](https://img.shields.io/pypi/v/hsir) ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FZeqiang-Lai%2FHSIR&countColor=%23263759&style=flat)
+[![PyPI](https://img.shields.io/pypi/v/hsir)](https://pypi.org/project/hsir/) ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FZeqiang-Lai%2FHSIR&countColor=%23263759&style=flat)
 
 Out-of-box Hyperspectral Image Restoration Toolbox
 
