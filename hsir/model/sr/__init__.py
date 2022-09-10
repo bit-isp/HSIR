@@ -1,5 +1,3 @@
-
-
 def sspsr(sf, n_colors):
     from .sspsr.net import SSPSR
     net = SSPSR(n_subs=8, n_ovls=2, n_colors=n_colors, n_blocks=6,
