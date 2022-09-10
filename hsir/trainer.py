@@ -1,6 +1,7 @@
 import os
 from functools import partial
 from os.path import join
+from datetime import datetime
 
 import torch
 import torch.cuda
@@ -24,7 +25,6 @@ PBAR = {
     'tqdm': partial(tqdm, dynamic_ncols=True, ascii=' >=')
     
 }
-
 
 def ensure_dir(path):
     os.makedirs(path, exist_ok=True)
@@ -67,6 +67,8 @@ class Logger:
     def log(self, content):
         content = str(content)
         with open(self.path, 'a') as f:
+            dtstr = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+            f.write(dtstr+' - ')
             f.write(content + '\n')
             
     def print(self, *value, **kwargs):
@@ -87,10 +89,8 @@ class Bandwise(object):
             bwindex.append(index)
         return bwindex
 
-
 mpsnr = Bandwise(partial(peak_signal_noise_ratio, data_range=1))
-
-                  
+      
 class Trainer:
     def __init__(
         self, 
