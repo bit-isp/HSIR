@@ -510,6 +510,8 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
 
 ## Citation
 
+If you find this repo helpful, please considering citing us.
+
 ```bibtex
 @article{LAI2022281,
     title = {Deep plug-and-play prior for hyperspectral image restoration},
