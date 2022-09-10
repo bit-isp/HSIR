@@ -508,6 +508,12 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
 </table>
 </details>
 
+## Acknowledgement
+
+- [QRNN3D](https://github.com/Vandermode/QRNN3D)
+- [DPHSIR](https://github.com/Zeqiang-Lai/DPHSIR)
+- [MST](https://github.com/caiyuanhao1998/MST)
+
 ## Citation
 
 If you find this repo helpful, please considering citing us.
