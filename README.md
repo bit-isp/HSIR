@@ -1,5 +1,7 @@
 # HSIR
 
+![PyPI](https://img.shields.io/pypi/v/hsir) ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FZeqiang-Lai%2FHSIR&countColor=%23263759&style=flat)
+
 Out-of-box Hyperspectral Image Restoration Toolbox
 
 <img src="https://github.com/Vandermode/QRNN3D/raw/master/imgs/PaviaU.gif" height="140px"/>  <img src="https://github.com/Vandermode/QRNN3D/raw/master/imgs/Indian_pines.gif" height="140px"/>  <img src="https://github.com/Vandermode/QRNN3D/raw/master/imgs/Urban.gif" height="140px"/> 
