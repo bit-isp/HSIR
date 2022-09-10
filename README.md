@@ -1,6 +1,6 @@
 # HSIR
 
-[![PyPI](https://img.shields.io/pypi/v/hsir)](https://pypi.org/project/hsir/) ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FZeqiang-Lai%2FHSIR&countColor=%23263759&style=flat)
+[![PyPI](https://img.shields.io/pypi/v/hsir)](https://pypi.org/project/hsir/)
 
 Out-of-box Hyperspectral Image Restoration Toolbox
 
@@ -524,3 +524,5 @@ If you find this repo helpful, please considering citing us.
     author = {Zeqiang Lai and Kaixuan Wei and Ying Fu},
 }
 ```
+
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FZeqiang-Lai%2FHSIR&countColor=%23263759&style=flat)
