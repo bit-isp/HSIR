@@ -25,6 +25,64 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
 
 ## Benchmark
 
+Supported Models
+
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>Denoising</b>
+      </td>
+      <td>
+        <b>Super Resolution</b>
+      </td>
+      <td>
+        <b>Spectral Compressive Imaging</b>
+      </td>
+      <td>
+        <b>Spectral Reconstruction</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <ul>
+            <li><a href="https://ieeexplore.ieee.org/document/8454887">HSID-CNN (TGRS'2018)</a></li>
+            <li><a href="https://arxiv.org/abs/2003.04547">QRNN3D (TNNLS'2020)</a></li>
+            <li><a href="https://github.com/inria-thoth/T3SC">TS3C (NeurIPS'2021)</a></li>
+            <li><a href="https://github.com/Zeqiang-Lai/DPHSIR">GRUNet (Neurocomputing'2021)</a></li>
+      </ul>
+      </td>
+      <td>
+        <ul>
+          <li><a href="#">Bi3DQRNN (JStar'2021)</a></li>
+          <li><a href="#">SSPSR (TCI'2020)</a></li>
+          <li><a href="#">MCNet (Remote Sense'2020)</a></li>
+          <li><a href="#">IFN (TGRS'2020)</a></li>
+          <li><a href="#">3D-FCNN (Remote Sense'2017)</a></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><a href="#">MST (CVPR'2022)</a></li>
+          <li><a href="#">CST (ECCV'2022)</a></li>
+          <li><a href="#">MST++ (CVPRW'2022)</a></li>
+          <li><a href="#">HDNET (CVPR'2022)</a></li>
+          <li><a href="#">BIRNAT (TPAMI'2022)</a></li>
+          <li><a href="#">DGSMP (CVPR'2021)</a></li>
+          <li><a href="#">GAP-Net (arxiv'2020)</a></li>
+          <li><a href="#">TSA-Net (ECCV'2020)</a></li>
+          <li><a href="#">ADMM-Net (ICCV'2019)</a></li>
+          <li><a href="#">λ-Net (ICCV'2019)</a></li>
+        </ul>
+      </td>
+      <td>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
+
 <details>
   <summary>Gaussian Denoising on ICVL</summary>
  <table>
