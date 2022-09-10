@@ -2,12 +2,14 @@ import os
 import argparse
 import numpy as np
 
-from torchlight.utils import instantiate_from
+from torchlight.utils import instantiate_from, locate
 from torchlight.nn.utils import adjust_learning_rate, get_learning_rate
 
 import hsir.model
+import hsir.scheduler
 import hsir.data.dataloader as loaders
 from hsir.trainer import Trainer
+from hsir.scheduler import MultiStepSetLR
 
 
 def train_cfg():
@@ -15,7 +17,8 @@ def train_cfg():
     parser.add_argument('--arch', '-a', required=True)
     parser.add_argument('--name', '-n', type=str, default=None,
                         help='name of the experiment, if not specified, arch will be used.')
-    parser.add_argument('--lr', type=float, default=1e-3)
+    parser.add_argument('--lr', type=float, default=None)
+    parser.add_argument('--schedule', type=str, default='hsir.schedule.denoise_default')
     parser.add_argument('--resume', '-r', action='store_true')
     parser.add_argument('--bandwise', action='store_true')
     parser.add_argument('--use-conv2d', action='store_true')
@@ -33,8 +36,10 @@ def train_cfg():
 def main():
     cfg = train_cfg()
     net = instantiate_from(hsir.model, cfg.arch)
+    schedule = locate(cfg.schedule)
     trainer = Trainer(
         net,
+        lr=schedule.base_lr,
         save_dir=os.path.join(cfg.save_root, cfg.name),
         gpu_ids=cfg.gpu_ids,
         bandwise=cfg.bandwise,
@@ -54,46 +59,29 @@ def main():
     ]
 
     """Main loop"""
-    base_lr = 1e-3
-    adjust_learning_rate(trainer.optimizer, cfg.lr)
-
+    if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
+    lr_scheduler = MultiStepSetLR(trainer.optimizer, schedule.lr_schedule)
     epoch_per_save = 10
     best_psnr = 0
     while trainer.epoch < 80:
         np.random.seed()  # reset seed per epoch, otherwise the noise will be added with a specific pattern
-        if trainer.epoch == 20:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.1)
-        if trainer.epoch == 30:
-            adjust_learning_rate(trainer.optimizer, base_lr)
-        if trainer.epoch == 45:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.1)
-        if trainer.epoch == 50:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.1)
-        if trainer.epoch == 55:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.05)
-        if trainer.epoch == 60:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.01)
-        if trainer.epoch == 65:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.005)
-        if trainer.epoch == 75:
-            adjust_learning_rate(trainer.optimizer, base_lr * 0.001)
-        trainer.logger.print('lr=', get_learning_rate(trainer.optimizer))
-
-        if trainer.epoch < 30:
-            trainer.train(train_loader1)
-        else:
-            trainer.train(train_loader2, warm_up=trainer.epoch == 30)
-
+        trainer.logger.print('Epoch [{}] Use lr={}'.format(trainer.epoch, get_learning_rate(trainer.optimizer)))
         if trainer.epoch == 30: best_psnr = 0
 
+        # train
+        if trainer.epoch < 30: trainer.train(train_loader1)
+        else: trainer.train(train_loader2, warm_up=trainer.epoch == 30)
+
+        # save ckpt
         metrics = trainer.validate(val_loaders[0], 'icvl-validate-50')
         if metrics['psnr'] > best_psnr:
             best_psnr = metrics['psnr']
             trainer.save_checkpoint('model_best.pth')
-
-        trainer.save_checkpoint('model_latest.pth')
         if trainer.epoch % epoch_per_save == 0:
             trainer.save_checkpoint()
+        trainer.save_checkpoint('model_latest.pth')
+
+        lr_scheduler.step()
 
 
 if __name__ == '__main__':
