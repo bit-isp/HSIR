@@ -25,8 +25,8 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
 
 ## Benchmark
 
-Supported Models
-
+<details>
+<summary>Supported Models</summary>
 <table align="center">
   <tbody>
     <tr align="center" valign="bottom">
@@ -82,6 +82,7 @@ Supported Models
     </tr>
   </tbody>
 </table>
+</details>
 
 <details>
   <summary>Gaussian Denoising on ICVL</summary>
