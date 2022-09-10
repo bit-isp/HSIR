@@ -198,7 +198,7 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
     <td>38.66</td>
     <td>0.974</td>
     <td>0.067</td>
-    <td>42.24</td>
+    <td>42.23</td>
     <td>0.985</td>
     <td>0.053</td>
   </tr>
@@ -252,7 +252,7 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
     <td>39.05</td>
     <td>0.974</td>
     <td>0.096</td>
-    <td>41.42</td>
+    <td>41.52</td>
     <td>0.983</td>
     <td>0.085</td>
   </tr>
@@ -280,7 +280,232 @@ python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
 
 <details>
   <summary>Complex Denoising on ICVL</summary>
-  
+<table>
+<thead>
+  <tr>
+    <th rowspan="2"></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th colspan="3">non-iid</th>
+    <th colspan="3">g+stripe</th>
+    <th colspan="3">g+deadline</th>
+    <th colspan="3">g+impulse</th>
+    <th colspan="3">mixture</th>
+  </tr>
+  <tr>
+    <th>Params(M)</th>
+    <th>Runtime(s)</th>
+    <th>FLOPs</th>
+    <th>PSNR</th>
+    <th>SSIM</th>
+    <th>SAM</th>
+    <th>PSNR</th>
+    <th>SSIM</th>
+    <th>SAM</th>
+    <th>PSNR</th>
+    <th>SSIM</th>
+    <th>SAM</th>
+    <th>PSNR</th>
+    <th>SSIM</th>
+    <th>SAM</th>
+    <th>PSNR</th>
+    <th>SSIM</th>
+    <th>SAM</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Noisy</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>18.25</td>
+    <td>0.168</td>
+    <td>0.898</td>
+    <td>17.80</td>
+    <td>0.159</td>
+    <td>0.910</td>
+    <td>17.61</td>
+    <td>0.155</td>
+    <td>0.917</td>
+    <td>14.80</td>
+    <td>0.114</td>
+    <td>0.926</td>
+    <td>14.08</td>
+    <td>0.099</td>
+    <td>0.944</td>
+  </tr>
+  <tr>
+    <td>LRMR</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>32.80</td>
+    <td>0.719</td>
+    <td>0.185</td>
+    <td>32.62</td>
+    <td>0.717</td>
+    <td>0.187</td>
+    <td>31.83</td>
+    <td>0.709</td>
+    <td>0.227</td>
+    <td>29.70</td>
+    <td>0.623</td>
+    <td>0.311</td>
+    <td>28.68</td>
+    <td>0.608</td>
+    <td>0.353</td>
+  </tr>
+  <tr>
+    <td>LRTV</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>33.62</td>
+    <td>0.905</td>
+    <td>0.077</td>
+    <td>33.49</td>
+    <td>0.905</td>
+    <td>0.078</td>
+    <td>32.37</td>
+    <td>0.895</td>
+    <td>0.115</td>
+    <td>31.56</td>
+    <td>0.871</td>
+    <td>0.242</td>
+    <td>30.47</td>
+    <td>0.858</td>
+    <td>0.287</td>
+  </tr>
+  <tr>
+    <td>NMoG</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>34.51</td>
+    <td>0.812</td>
+    <td>0.187</td>
+    <td>33.87</td>
+    <td>0.799</td>
+    <td>0.265</td>
+    <td>32.87</td>
+    <td>0.797</td>
+    <td>0.276</td>
+    <td>28.60</td>
+    <td>0.652</td>
+    <td>0.486</td>
+    <td>27.31</td>
+    <td>0.632</td>
+    <td>0.513</td>
+  </tr>
+  <tr>
+    <td>TDTV</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>38.14</td>
+    <td>0.944</td>
+    <td>0.075</td>
+    <td>37.67</td>
+    <td>0.940</td>
+    <td>0.081</td>
+    <td>36.15</td>
+    <td>0.930</td>
+    <td>0.099</td>
+    <td>36.67</td>
+    <td>0.935</td>
+    <td>0.094</td>
+    <td>34.77</td>
+    <td>0.919</td>
+    <td>0.113</td>
+  </tr>
+  <tr>
+    <td>HSID</td>
+    <td>0.40</td>
+    <td>3</td>
+    <td></td>
+    <td>38.40</td>
+    <td>0.947</td>
+    <td>0.095</td>
+    <td>37.77</td>
+    <td>0.942</td>
+    <td>0.104</td>
+    <td>37.65</td>
+    <td>0.940</td>
+    <td>0.102</td>
+    <td>35.00</td>
+    <td>0.899</td>
+    <td>0.174</td>
+    <td>34.05</td>
+    <td>0.888</td>
+    <td>0.181</td>
+  </tr>
+  <tr>
+    <td>TS3C</td>
+    <td>0.83</td>
+    <td>0.95</td>
+    <td></td>
+    <td>41.12</td>
+    <td>0.986</td>
+    <td>0.069</td>
+    <td>40.66</td>
+    <td>0.985</td>
+    <td>0.077</td>
+    <td>39.38</td>
+    <td>0.982</td>
+    <td>0.100</td>
+    <td>35.92</td>
+    <td>0.951</td>
+    <td>0.205</td>
+    <td>34.36</td>
+    <td>0.945</td>
+    <td>0.230</td>
+  </tr>
+  <tr>
+    <td>QRNN3D</td>
+    <td>0.86</td>
+    <td>0.73</td>
+    <td></td>
+    <td>42.79</td>
+    <td>0.978</td>
+    <td>0.052</td>
+    <td>42.35</td>
+    <td>0.976</td>
+    <td>0.055</td>
+    <td>42.23</td>
+    <td>0.976</td>
+    <td>0.056</td>
+    <td>39.23</td>
+    <td>0.945</td>
+    <td>0.109</td>
+    <td>38.25</td>
+    <td>0.938</td>
+    <td>0.107</td>
+  </tr>
+  <tr>
+    <td>GRUNet</td>
+    <td>14.2</td>
+    <td>0.87</td>
+    <td></td>
+    <td>42.89</td>
+    <td>0.992</td>
+    <td>0.047</td>
+    <td>42.39</td>
+    <td>0.991</td>
+    <td>0.050</td>
+    <td>42.11</td>
+    <td>0.991</td>
+    <td>0.050</td>
+    <td>40.70</td>
+    <td>0.985</td>
+    <td>0.067</td>
+    <td>38.51</td>
+    <td>0.981</td>
+    <td>0.081</td>
+  </tr>
+</tbody>
+</table>
 </details>
 
 ## Citation
