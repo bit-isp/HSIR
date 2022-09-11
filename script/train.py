@@ -58,10 +58,10 @@ def main():
 
     """Main loop"""
     if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
-    lr_scheduler = MultiStepSetLR(trainer.optimizer, schedule.lr_schedule)
+    lr_scheduler = MultiStepSetLR(trainer.optimizer, schedule.lr_schedule, epoch=trainer.epoch)
     epoch_per_save = 10
     best_psnr = 0
-    while trainer.epoch < 80:
+    while trainer.epoch < schedule.max_epochs:
         np.random.seed()  # reset seed per epoch, otherwise the noise will be added with a specific pattern
         trainer.logger.print('Epoch [{}] Use lr={}'.format(trainer.epoch, get_learning_rate(trainer.optimizer)))
         if trainer.epoch == 30: best_psnr = 0

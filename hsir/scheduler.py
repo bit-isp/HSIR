@@ -4,10 +4,10 @@ def adjust_learning_rate(optimizer, lr):
         param_group['lr'] = lr
         
 class MultiStepSetLR:
-    def __init__(self, optimizer, schedule) -> None:
+    def __init__(self, optimizer, schedule, epoch=0) -> None:
         self.optimizer = optimizer
         self.schedule = schedule
-        self.epoch = 0
+        self.epoch = epoch
 
     def step(self):
         self.epoch += 1

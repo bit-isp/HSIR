@@ -18,7 +18,7 @@ __all__ = [
 
 
 class HSITestDataset(Dataset):
-    def __init__(self, root, size=None, use_cdhw=False, return_name=False):
+    def __init__(self, root, size=None, use_cdhw=True, return_name=False):
         super().__init__()
         self.dataset = MatDataFromFolder(root, size=size)
         self.transform = Compose([

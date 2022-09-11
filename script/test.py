@@ -29,8 +29,7 @@ def eval(net, loader, name, logger, visualize, clamp):
     with torch.no_grad():
         pbar = tqdm(total=len(loader), dynamic_ncols=True)
         pbar.set_description(f'Test {name}')
-        for i, (data, filename) in enumerate(loader):
-            inputs, targets = data
+        for i, (inputs, targets, filename) in enumerate(loader):
             inputs, targets = inputs.to(device), targets.to(device)
 
             if clamp:
@@ -79,7 +78,7 @@ def eval(net, loader, name, logger, visualize, clamp):
     tl.utils.io.yamlwrite(join(logger.log_dir, 'results.yaml'), results)
 
 def main(args, logger):
-    net = tl.utils.instantiate_from(hsir.model, args.arch)
+    net = tl.utils.instantiate(args.arch)
     net = net.to(device)
 
     ckpt = tl.utils.dict_get(torch.load(args.resume), args.key_path)
@@ -89,18 +88,18 @@ def main(args, logger):
     
     for testset in args.testset:
         testdir = join(args.basedir, testset)
-        dataset = HSITestDataset(testdir)
+        dataset = HSITestDataset(testdir, use_cdhw=True, return_name=True)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
         eval(net, loader, testset, logger, args.vis if args.save_img else None, args.clamp)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='HSIR Test script')
-    parser.add_argument('-a', '--arch', default='qrnn3d', help='architecture name')
-    parser.add_argument('-t', '--testset', nargs='+', default=['icvl_512_50'], help='testset')
+    parser.add_argument('-a', '--arch', required=True, help='architecture name')
     parser.add_argument('-r', '--resume', required=True, help='checkpoint')
-    parser.add_argument('--basedir', default='/share/dataset/hsi/icvl/test', help='basedir')
-    parser.add_argument('--logdir', default='RESULTS/TEST', help='logdir')
+    parser.add_argument('-t', '--testset', nargs='+', default=['icvl_512_50'], help='testset')
+    parser.add_argument('--basedir', default='data', help='basedir')
+    parser.add_argument('--logdir', default='results/test', help='logdir')
     parser.add_argument('--save_img', action='store_true', help='whether to save image')
     parser.add_argument('--clamp', action='store_true', help='whether clamp input into [0, 1]')
     parser.add_argument('--vis', default='color', choices=['color', 'gray'], help='how to visualize hsi')
