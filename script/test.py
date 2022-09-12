@@ -25,11 +25,13 @@ def eval(net, loader, name, logger, visualize, clamp, bandwise):
         'gray': hsir.data.utils.visualize_gray,
         'color': hsir.data.utils.visualize_color
     }
-
+    detail_stat = {}
+    
     with torch.no_grad():
         pbar = tqdm(total=len(loader), dynamic_ncols=True)
         pbar.set_description(f'Test {name}')
         for i, (inputs, targets, filename) in enumerate(loader):
+            filename = filename[0]
             inputs, targets = inputs.to(device), targets.to(device)
 
             if clamp:
@@ -45,13 +47,13 @@ def eval(net, loader, name, logger, visualize, clamp, bandwise):
 
             if visualize:
                 logger.save_img(
-                    join(name, tl.utils.filename(filename[0]) + '.png'),
+                    join(name, tl.utils.filename(filename) + '.png'),
                     visualize_fns[visualize](outputs)
                 )
 
-            psnr = tl.metrics.mpsnr(targets, outputs)
-            ssim = tl.metrics.mssim(targets, outputs)
-            sam = tl.metrics.sam(targets, outputs)
+            psnr = tl.metrics.mpsnr(targets, outputs).item()
+            ssim = tl.metrics.mssim(targets, outputs).item()
+            sam = tl.metrics.sam(targets, outputs).item()
 
             tracker.update('psnr', psnr)
             tracker.update('ssim', ssim)
@@ -64,9 +66,12 @@ def eval(net, loader, name, logger, visualize, clamp, bandwise):
                 'sam': '{0:.4f}'.format(sam),
                 'run_time': '{0}'.format(tl.utils.format_time(run_time)),
             }
+            
             logger.debug('{}: {}'.format(filename[0], summary))
             pbar.set_postfix({k: f'{v:.4f}' for k, v in tracker.result().items()})
             pbar.update()
+            
+            detail_stat[filename] = {'psnr': psnr, 'ssim': ssim, 'sam': sam}
         pbar.close()
 
     avg_speed = tl.utils.format_time(tracker['time'])
@@ -74,8 +79,8 @@ def eval(net, loader, name, logger, visualize, clamp, bandwise):
     logger.info(f'Average results {tracker.summary()}')
 
     # log structural results
-    results = {k: str(v) for k, v in tracker.result().items()}
-    tl.utils.io.yamlwrite(join(logger.log_dir, 'results.yaml'), results)
+    avg_stat = {k: v for k, v in tracker.result().items()}
+    tl.utils.io.yamlwrite(join(logger.log_dir, 'results.yaml'), {'avg': avg_stat, 'detail': detail_stat})
 
 def main(args, logger):
     net = tl.utils.instantiate(args.arch)
@@ -90,6 +95,7 @@ def main(args, logger):
         testdir = join(args.basedir, testset)
         dataset = HSITestDataset(testdir, use_cdhw= not args.use_conv2d, return_name=True)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
+        logger = tl.logging.Logger(join(logdir, testset), name=testset)
         eval(net, loader, testset, logger, 
              args.vis if args.save_img else None, 
              args.clamp,
