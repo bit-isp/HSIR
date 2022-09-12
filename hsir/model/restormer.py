@@ -287,3 +287,7 @@ class Restormer(nn.Module):
 def restormer_b31():
     net = Restormer(31, 31)
     return net
+
+def restormer_ssr():
+    net = Restormer(3, 31)
+    return net
