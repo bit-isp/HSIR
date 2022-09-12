@@ -16,7 +16,7 @@ tl.metrics.set_data_format('chw')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def eval(net, loader, name, logger, visualize, clamp):
+def eval(net, loader, name, logger, visualize, clamp, bandwise):
     logger.info('Evaluating {}'.format(name))
 
     net.eval()
@@ -88,9 +88,12 @@ def main(args, logger):
     
     for testset in args.testset:
         testdir = join(args.basedir, testset)
-        dataset = HSITestDataset(testdir, use_cdhw=True, return_name=True)
+        dataset = HSITestDataset(testdir, use_cdhw= not args.use_conv2d, return_name=True)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
-        eval(net, loader, testset, logger, args.vis if args.save_img else None, args.clamp)
+        eval(net, loader, testset, logger, 
+             args.vis if args.save_img else None, 
+             args.clamp,
+             args.bandwise)
 
 
 if __name__ == '__main__':
@@ -104,6 +107,8 @@ if __name__ == '__main__':
     parser.add_argument('--clamp', action='store_true', help='whether clamp input into [0, 1]')
     parser.add_argument('--vis', default='color', choices=['color', 'gray'], help='how to visualize hsi')
     parser.add_argument('-kp', '--key_path', default='net', help='key path to access network state_dict in ckpt')
+    parser.add_argument('--bandwise', action='store_true')
+    parser.add_argument('--use-conv2d', action='store_true')
     args = parser.parse_args()
 
     logdir = tl.utils.auto_rename(join(args.logdir, args.arch), ignore_ext=True)
