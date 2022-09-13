@@ -2,10 +2,11 @@ import os
 import argparse
 import numpy as np
 
+from torch.utils.data import DataLoader
 from torchlight.utils import instantiate, locate
 from torchlight.nn.utils import adjust_learning_rate, get_learning_rate
 
-import hsir.data.dataloader as loaders
+from hsir.data.ssr.dataset import TrainDataset, ValidDataset
 from hsir.trainer import Trainer
 from hsir.scheduler import MultiStepSetLR
 
@@ -18,12 +19,9 @@ def train_cfg():
     parser.add_argument('--lr', type=float, default=None)
     parser.add_argument('--schedule', type=str, default='hsir.schedule.denoise_default')
     parser.add_argument('--resume', '-r', action='store_true')
-    parser.add_argument('--bandwise', action='store_true')
-    parser.add_argument('--use-conv2d', action='store_true')
     parser.add_argument('--resume-path', '-rp', type=str, default=None)
-    parser.add_argument('--train-root', type=str, default='data/ICVL64_31_100.db')
-    parser.add_argument('--test-root', type=str, default='data')
-    parser.add_argument('--save-root', type=str, default='checkpoints')
+    parser.add_argument('--data-root', type=str, default='data/rgb2hsi')
+    parser.add_argument('--save-root', type=str, default='checkpoints/ssr')
     parser.add_argument('--gpu-ids', type=str, default='0', help='gpu ids')
     cfg = parser.parse_args()
     cfg.gpu_ids = [int(id) for id in cfg.gpu_ids.split(',')]
@@ -33,6 +31,7 @@ def train_cfg():
 
 def main():
     cfg = train_cfg()
+
     net = instantiate(cfg.arch)
     schedule = locate(cfg.schedule)
     trainer = Trainer(
@@ -40,20 +39,15 @@ def main():
         lr=schedule.base_lr,
         save_dir=os.path.join(cfg.save_root, cfg.name),
         gpu_ids=cfg.gpu_ids,
-        bandwise=cfg.bandwise,
     )
     trainer.logger.print(cfg)
     if cfg.resume: trainer.load(cfg.resume_path)
 
-    train_loader1 = loaders.gaussian_loader_train_s1(cfg.train_root, not cfg.use_conv2d)
-    train_loader2 = loaders.gaussian_loader_train_s2_16(cfg.train_root, not cfg.use_conv2d)
+    dataset = TrainDataset(cfg.data_root)
+    train_loader = DataLoader(dataset, batch_size=20, shuffle=True, num_workers=8, pin_memory=True)
 
-    test_root = cfg.test_root
-    testsets = ['icvl_512_50']
-    val_loaders = [
-        loaders.gaussian_loader_val(os.path.join(test_root, testset), not cfg.use_conv2d)
-        for testset in testsets
-    ]
+    dataset = ValidDataset(cfg.data_root)
+    val_loader = DataLoader(dataset, batch_size=1)
 
     """Main loop"""
     if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
@@ -61,22 +55,18 @@ def main():
     epoch_per_save = 10
     best_psnr = 0
     while trainer.epoch < schedule.max_epochs:
-        np.random.seed()  # reset seed per epoch, otherwise the noise will be added with a specific pattern
         trainer.logger.print('Epoch [{}] Use lr={}'.format(trainer.epoch, get_learning_rate(trainer.optimizer)))
-        if trainer.epoch == 30: best_psnr = 0
 
-        # train
-        if trainer.epoch < 30: trainer.train(train_loader1)
-        else: trainer.train(train_loader2, warm_up=trainer.epoch == 30)
+        trainer.train(train_loader)
 
         # save ckpt
-        metrics = trainer.validate(val_loaders[0], 'icvl-validate-50')
+        trainer.save_checkpoint('model_latest.pth')
+        metrics = trainer.validate(val_loader, 'NITRE')
         if metrics['psnr'] > best_psnr:
             best_psnr = metrics['psnr']
             trainer.save_checkpoint('model_best.pth')
         if trainer.epoch % epoch_per_save == 0:
             trainer.save_checkpoint()
-        trainer.save_checkpoint('model_latest.pth')
 
         lr_scheduler.step()
 

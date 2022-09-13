@@ -103,7 +103,6 @@ class Trainer:
         gpu_ids=[0],
         pbar='qqdm',
         bandwise=False,
-        use_conv2d=False,
     ):
         self.net = net
         self.clip = clip
@@ -113,7 +112,6 @@ class Trainer:
         self.device = torch.device('cuda' if gpu_ids else 'cpu')
         self.pbar = PBAR[pbar]
         self.bandwise = bandwise
-        self.use_2dconv = use_conv2d
         self.epoch = 0
         self.iteration = 0
         

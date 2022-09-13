@@ -1,44 +1,39 @@
-import torch
-from .edsr import EDSR
-from .HDNet import HDNet
-from .hinet import HINet
-from .hrnet import SGN
-from .HSCNN_Plus import HSCNN_Plus
-from .MIRNet import MIRNet
-from .MPRNet import MPRNet
-from .MST import MST
-from .MST_Plus_Plus import MST_Plus_Plus
-from .Restormer import Restormer
-from .AWAN import AWAN
+def mirnet():
+    from .MIRNet import MIRNet
+    return MIRNet(n_RRG=3, n_MSRB=1, height=3, width=1)
 
-def model_generator(method, pretrained_model_path=None):
-    if method == 'mirnet':
-        model = MIRNet(n_RRG=3, n_MSRB=1, height=3, width=1).cuda()
-    elif method == 'mst_plus_plus':
-        model = MST_Plus_Plus().cuda()
-    elif method == 'mst':
-        model = MST(dim=31, stage=2, num_blocks=[4, 7, 5]).cuda()
-    elif method == 'hinet':
-        model = HINet(depth=4).cuda()
-    elif method == 'mprnet':
-        model = MPRNet(num_cab=4).cuda()
-    elif method == 'restormer':
-        model = Restormer().cuda()
-    elif method == 'edsr':
-        model = EDSR().cuda()
-    elif method == 'hdnet':
-        model = HDNet().cuda()
-    elif method == 'hrnet':
-        model = SGN().cuda()
-    elif method == 'hscnn_plus':
-        model = HSCNN_Plus().cuda()
-    elif method == 'awan':
-        model = AWAN().cuda()
-    else:
-        print(f'Method {method} is not defined !!!!')
-    if pretrained_model_path is not None:
-        print(f'load model from {pretrained_model_path}')
-        checkpoint = torch.load(pretrained_model_path)
-        model.load_state_dict({k.replace('module.', ''): v for k, v in checkpoint['state_dict'].items()},
-                              strict=True)
-    return model
+def mst_plus_plus():
+    from .MST_Plus_Plus import MST_Plus_Plus
+    return MST_Plus_Plus()
+
+def mst():
+    from .MST import MST
+    return MST(dim=31, stage=2, num_blocks=[4, 7, 5])
+
+def hinet():
+    from .hinet import HINet
+    return HINet(depth=4)
+
+def mprnet():
+    from .MPRNet import MPRNet
+    return MPRNet(num_cab=4)
+
+def edsr():
+    from .edsr import EDSR
+    return EDSR()
+
+def hdnet():
+    from .HDNet import HDNet
+    return HDNet()
+
+def hrnet():
+    from .hrnet import SGN
+    return SGN()
+
+def hscnn_plus():
+    from .HSCNN_Plus import HSCNN_Plus
+    return HSCNN_Plus
+
+def awan():
+    from .AWAN import AWAN
+    return AWAN()
