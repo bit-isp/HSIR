@@ -1,6 +1,5 @@
 import os
 import argparse
-import numpy as np
 
 from torch.utils.data import DataLoader
 from torchlight.utils import instantiate, locate
