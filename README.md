@@ -19,8 +19,8 @@ pip install hsir
 Here are some runable examples, please refer to the code for more options.
 
 ```shell
-python script/train.py -a qrnn3d.qrnn3d
-python script/test.py -a qrnn3d.qrnn3d -t icvl_512_30 icvl_512_50 --save_img
+python hsirun/train.py -a qrnn3d.qrnn3d
+python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 ```
 
 ## Benchmark
