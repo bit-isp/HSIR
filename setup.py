@@ -6,7 +6,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 packages = find_packages()
-packages.append('script')
+packages.append('hsirun')
 
 setup(
     name='hsir',
