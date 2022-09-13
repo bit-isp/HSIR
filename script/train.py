@@ -1,6 +1,6 @@
-import os
 import argparse
 import numpy as np
+from os.path import join
 
 from torchlight.utils import instantiate, locate
 from torchlight.nn.utils import adjust_learning_rate, get_learning_rate
@@ -13,6 +13,7 @@ from hsir.scheduler import MultiStepSetLR
 def train_cfg():
     parser = argparse.ArgumentParser()
     parser.add_argument('--arch', '-a', required=True)
+    parser.add_argument('--noise', default='gaussian', choices=['gaussian', 'complex'])
     parser.add_argument('--name', '-n', type=str, default=None,
                         help='name of the experiment, if not specified, arch will be used.')
     parser.add_argument('--lr', type=float, default=None)
@@ -38,22 +39,23 @@ def main():
     trainer = Trainer(
         net,
         lr=schedule.base_lr,
-        save_dir=os.path.join(cfg.save_root, cfg.name),
+        save_dir=join(cfg.save_root, cfg.name),
         gpu_ids=cfg.gpu_ids,
         bandwise=cfg.bandwise,
     )
     trainer.logger.print(cfg)
     if cfg.resume: trainer.load(cfg.resume_path)
 
-    train_loader1 = loaders.gaussian_loader_train_s1(cfg.train_root, not cfg.use_conv2d)
-    train_loader2 = loaders.gaussian_loader_train_s2_16(cfg.train_root, not cfg.use_conv2d)
-
-    test_root = cfg.test_root
-    testsets = ['icvl_512_50']
-    val_loaders = [
-        loaders.gaussian_loader_val(os.path.join(test_root, testset), not cfg.use_conv2d)
-        for testset in testsets
-    ]
+    # preare dataset
+    if cfg.noise == 'gaussian':
+        train_loader1 = loaders.gaussian_loader_train_s1(cfg.train_root, cfg.use_conv2d)
+        train_loader2 = loaders.gaussian_loader_train_s2_16(cfg.train_root, cfg.use_conv2d)
+        val_name = 'icvl_512_50'
+        val_loader = loaders.gaussian_loader_val(join(cfg.test_root, val_name), cfg.use_conv2d)
+    else:
+        train_loader = loaders.complex_loader_train(cfg.train_root, cfg.use_conv2d)
+        val_name = 'icvl_512_mixture'
+        val_loader = loaders.complex_loader_val(join(cfg.test_root, val_name), cfg.use_conv2d)
 
     """Main loop"""
     if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
@@ -63,14 +65,17 @@ def main():
     while trainer.epoch < schedule.max_epochs:
         np.random.seed()  # reset seed per epoch, otherwise the noise will be added with a specific pattern
         trainer.logger.print('Epoch [{}] Use lr={}'.format(trainer.epoch, get_learning_rate(trainer.optimizer)))
-        if trainer.epoch == 30: best_psnr = 0
 
         # train
-        if trainer.epoch < 30: trainer.train(train_loader1)
-        else: trainer.train(train_loader2, warm_up=trainer.epoch == 30)
+        if cfg.noise == 'gaussian':
+            if trainer.epoch == 30: best_psnr = 0
+            if trainer.epoch < 30: trainer.train(train_loader1)
+            else: trainer.train(train_loader2, warm_up=trainer.epoch == 30)
+        else:
+            trainer.train(train_loader, warm_up=trainer.epoch == 80)
 
         # save ckpt
-        metrics = trainer.validate(val_loaders[0], 'icvl-validate-50')
+        metrics = trainer.validate(val_loader, val_name)
         if metrics['psnr'] > best_psnr:
             best_psnr = metrics['psnr']
             trainer.save_checkpoint('model_best.pth')

@@ -9,13 +9,13 @@ class HSI2Tensor(object):
     into torch 4D Tensor (1, C, H, W) or (C, H, W)
     """
 
-    def __init__(self, use_cdhw=True):
-        """ use_cdhw: True for (C, D, H, W) and False for (C, H, W) """
-        self.use_cdhw = use_cdhw
+    def __init__(self, use_chw=True):
+        """ use_chw: True for (C, D, H, W) and False for (C, H, W) """
+        self.use_chw = use_chw
 
     def __call__(self, hsi):
         img = torch.from_numpy(hsi)
-        if self.use_cdhw:
+        if not self.use_chw:
             img = img.unsqueeze(0)
         return img.float()
 

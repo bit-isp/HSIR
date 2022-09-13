@@ -93,7 +93,7 @@ def main(args, logger):
     
     for testset in args.testset:
         testdir = join(args.basedir, testset)
-        dataset = HSITestDataset(testdir, use_cdhw= not args.use_conv2d, return_name=True)
+        dataset = HSITestDataset(testdir, use_chw=args.use_conv2d, return_name=True)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
         logger = tl.logging.Logger(join(logdir, testset), name=testset)
         eval(net, loader, testset, logger, 

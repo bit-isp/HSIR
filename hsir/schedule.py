@@ -8,6 +8,7 @@ denoise_default = TrainSchedule(
     max_epochs=80,
     base_lr=1e-3,
     lr_schedule={
+        0: 1e-3,
         20: 1e-4,
         30: 1e-3,
         45: 1e-4,
@@ -22,9 +23,22 @@ denoise_restormer = TrainSchedule(
     max_epochs=80,
     base_lr=1e-4,
     lr_schedule={
+        0: 1e-4,
         45: 5e-5,
         55: 1e-5,
         65: 5e-6,
         75: 1e-6,
+    },
+)
+
+denoise_complex_default = TrainSchedule(
+    max_epochs=110,
+    base_lr=1e-3,
+    lr_schedule={
+        80: 1e-3,
+        90: 5e-4,
+        95: 1e-4,
+        100: 5e-5,
+        105: 1e-5,
     },
 )

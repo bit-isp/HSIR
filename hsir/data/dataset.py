@@ -18,12 +18,12 @@ __all__ = [
 
 
 class HSITestDataset(Dataset):
-    def __init__(self, root, size=None, use_cdhw=True, return_name=False):
+    def __init__(self, root, size=None, use_chw=False, return_name=False):
         super().__init__()
         self.dataset = MatDataFromFolder(root, size=size)
         self.transform = Compose([
             LoadMatHSI(input_key='input', gt_key='gt',
-                       transform=partial(np.expand_dims, axis=0) if use_cdhw else None),
+                       transform=partial(np.expand_dims, axis=0) if use_chw else None),
         ])
         self.return_name = return_name
 
