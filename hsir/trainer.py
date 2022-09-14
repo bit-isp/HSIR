@@ -171,8 +171,8 @@ class Trainer:
         pbar = self.pbar(total=len(train_loader))
         pbar.set_description('Epoch: {}'.format(format_str('yellow', self.epoch)))
 
-        for batch_idx, (inputs, targets) in enumerate(train_loader):
-            inputs, targets = inputs.to(self.device), targets.to(self.device)
+        for batch_idx, data in enumerate(train_loader):
+            inputs, targets = data['input'].to(self.device), data['target'].to(self.device)
             outputs, loss_data, total_norm = self._train_step(inputs, targets)
             psnr = np.mean(mpsnr(outputs, targets))
             # psnr = tl.metrics.mpsnr(outputs.squeeze(1), targets.squeeze(1))
@@ -219,8 +219,8 @@ class Trainer:
         self.logger.log('[i] Eval dataset {}...'.format(name))
 
         with torch.no_grad():
-            for inputs, targets in valid_loader:
-                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            for data in valid_loader:
+                inputs, targets = data['input'].to(self.device), data['target'].to(self.device)
                 outputs = self._eval_step(inputs)
                 if not self.use_2dconv:
                     outputs = outputs.squeeze(1)

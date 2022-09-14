@@ -39,7 +39,10 @@ class ValidDataset(Dataset):
     def __getitem__(self, idx):
         rgb = self.rgbs[idx]
         hsi = self.hsis[idx]
-        return rgb, hsi
+        return {
+            'input': rgb,
+            'target': hsi
+        }
 
     def __len__(self):
         return self.num_img
@@ -109,7 +112,10 @@ class TrainDataset(Dataset):
             rgb = self._augment(rgb, rotTimes, vFlip, hFlip)
             hsi = self._augment(hsi, rotTimes, vFlip, hFlip)
 
-        return rgb.copy(), hsi.copy()
+        return {
+            'input': rgb.copy(),
+            'target': hsi.copy()
+        }
 
     def __len__(self):
         return self.patch_per_img * self.num_img

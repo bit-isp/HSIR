@@ -30,9 +30,9 @@ def eval(net, loader, name, logger, visualize, clamp, bandwise):
     with torch.no_grad():
         pbar = tqdm(total=len(loader), dynamic_ncols=True)
         pbar.set_description(f'Test {name}')
-        for i, (inputs, targets, filename) in enumerate(loader):
-            filename = filename[0]
-            inputs, targets = inputs.to(device), targets.to(device)
+        for data in loader:
+            filename = data['filename'][0]
+            inputs, targets = data['input'].to(device), data['target'].to(device)
 
             if clamp:
                 inputs = torch.clamp(inputs, 0., 1.)

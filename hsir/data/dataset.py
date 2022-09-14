@@ -30,9 +30,10 @@ class HSITestDataset(Dataset):
     def __getitem__(self, index):
         mat, filename = self.dataset[index]
         inputs, targets = self.transform(mat)
+        output = {'input': inputs, 'target': targets}
         if self.return_name:
-            return inputs, targets, filename
-        return inputs, targets
+            output['filename'] = filename
+        return output
 
     def __len__(self):
         return len(self.dataset)
@@ -76,7 +77,7 @@ class HSITrainDataset(Dataset):
             img = self.input_transform(img)
         if self.target_transform is not None:
             target = self.target_transform(target)
-        return img, target
+        return {'input': img, 'target': target}
 
     def __len__(self):
         return len(self.dataset)
