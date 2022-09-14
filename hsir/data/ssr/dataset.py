@@ -49,7 +49,7 @@ class ValidDataset(Dataset):
 
 
 class TrainDataset(Dataset):
-    def __init__(self, root, crop_size=128, stride=8, augment=True):
+    def __init__(self, root, crop_size=128, stride=8, augment=True, size=None):
         self.crop_size = crop_size
         self.hsis = []
         self.rgbs = []
@@ -65,14 +65,18 @@ class TrainDataset(Dataset):
         rgb_root = os.path.join(root, 'Train_RGB')
         # with open(os.path.join(root, 'split_txt', 'train_list.txt'), 'r') as f:
         #     names = [n.strip() for n in f.readlines()]
-        names = [n.split('.')[0] for n in os.listdir(hsi_root) if n.endswith('.mat')][:5]
+        names = [n.split('.')[0] for n in os.listdir(hsi_root) if n.endswith('.mat')]
         names.sort()
+        if size is not None: names = names[:size]
 
         for name in tqdm(names, desc='Load data to memory'):
             hsi_path = os.path.join(hsi_root, name + '.mat')
             rgb_path = os.path.join(rgb_root, name + '.jpg')
-
-            hsi = np.float32(loadmat(hsi_path)['cube'])
+            try:
+                hsi = np.float32(loadmat(hsi_path)['cube'])
+            except:
+                print('fail to load', hsi_path)
+                continue
             hsi = np.transpose(hsi, [2, 0, 1])
             rgb = cv2.cvtColor(cv2.imread(rgb_path), cv2.COLOR_BGR2RGB)
             rgb = np.float32(rgb)

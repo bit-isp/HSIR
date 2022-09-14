@@ -2,12 +2,12 @@ import os
 import argparse
 
 from torch.utils.data import DataLoader
-from torchlight.utils import instantiate, locate
-from torchlight.nn.utils import adjust_learning_rate, get_learning_rate
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torchlight.utils import instantiate
+from torchlight.nn.utils import get_learning_rate
 
 from hsir.data.ssr.dataset import TrainDataset, ValidDataset
 from hsir.trainer import Trainer
-from hsir.scheduler import MultiStepSetLR
 
 
 def train_cfg():
@@ -15,7 +15,8 @@ def train_cfg():
     parser.add_argument('--arch', '-a', required=True)
     parser.add_argument('--name', '-n', type=str, default=None,
                         help='name of the experiment, if not specified, arch will be used.')
-    parser.add_argument('--lr', type=float, default=None)
+    parser.add_argument('--lr', type=float, default=4e-4)
+    parser.add_argument('--epochs', type=float, default=5)
     parser.add_argument('--schedule', type=str, default='hsir.schedule.denoise_default')
     parser.add_argument('--resume', '-r', action='store_true')
     parser.add_argument('--resume-path', '-rp', type=str, default=None)
@@ -32,10 +33,9 @@ def main():
     cfg = train_cfg()
 
     net = instantiate(cfg.arch)
-    schedule = locate(cfg.schedule)
     trainer = Trainer(
         net,
-        lr=schedule.base_lr,
+        lr=cfg.lr,
         save_dir=os.path.join(cfg.save_root, cfg.name),
         gpu_ids=cfg.gpu_ids,
     )
@@ -49,11 +49,11 @@ def main():
     val_loader = DataLoader(dataset, batch_size=1)
 
     """Main loop"""
-    if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
-    lr_scheduler = MultiStepSetLR(trainer.optimizer, schedule.lr_schedule, epoch=trainer.epoch)
+
+    # lr_scheduler = CosineAnnealingLR(trainer.optimizer, cfg.max_epochs, eta_min=1e-6)
     epoch_per_save = 10
     best_psnr = 0
-    while trainer.epoch < schedule.max_epochs:
+    while trainer.epoch < cfg.epochs:
         trainer.logger.print('Epoch [{}] Use lr={}'.format(trainer.epoch, get_learning_rate(trainer.optimizer)))
 
         trainer.train(train_loader)
@@ -67,7 +67,7 @@ def main():
         if trainer.epoch % epoch_per_save == 0:
             trainer.save_checkpoint()
 
-        lr_scheduler.step()
+        # lr_scheduler.step()
 
 
 if __name__ == '__main__':
