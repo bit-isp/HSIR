@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import tqdm
 from hdf5storage import loadmat
 from torch.utils.data import Dataset
-
+from hdf5storage import CantReadError
 
 class ValidDataset(Dataset):
     def __init__(self, root):
@@ -74,7 +74,7 @@ class TrainDataset(Dataset):
             rgb_path = os.path.join(rgb_root, name + '.jpg')
             try:
                 hsi = np.float32(loadmat(hsi_path)['cube'])
-            except:
+            except CantReadError:
                 print('fail to load', hsi_path)
                 continue
             hsi = np.transpose(hsi, [2, 0, 1])
