@@ -23,7 +23,11 @@ def main(arch, input_shape, total_steps=10, save_path='benchmark.json'):
 
     total_params = sum([param.nelement() for param in net.parameters()]) / 1e6
     print("Number of parameter: %.2fM" % (total_params))
-
+    
+    # warm up for benchmark
+    for _ in range(10):
+        net(input)
+    
     start = torch.cuda.Event(enable_timing=True)
     end = torch.cuda.Event(enable_timing=True)
 
