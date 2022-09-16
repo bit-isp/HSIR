@@ -25,7 +25,10 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 
 ## Benchmark
 
-[Pretrained Models]()
+[Pretrained Models](https://1drv.ms/u/s!AuS3o7sEiuJnf6F4THmqDMtDCwQ?e=JpfLP3) | [Training Log](https://pan.baidu.com/s/1OiuTArnqhjQmkCdehpmelQ) | [Datasets](https://pan.baidu.com/s/1BkNYhb9CBtXnKsQjNwYFyg) 
+
+<sub>*Baidu Drive's Share Code=HSIR*</sub>
+
 
 <details>
 <summary>Supported Models</summary>
