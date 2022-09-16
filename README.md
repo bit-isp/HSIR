@@ -48,8 +48,8 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
     <tr valign="top">
       <td>
         <ul>
-            <li><a href="https://ieeexplore.ieee.org/document/8454887">HSID-CNN (TGRS'2018)</a></li>
-            <li><a href="https://arxiv.org/abs/2003.04547">QRNN3D (TNNLS'2020)</a></li>
+            <li><a href="https://github.com/qzhang95/HSID-CNN">HSID-CNN (TGRS'2018)</a></li>
+            <li><a href="https://github.com/Vandermode/QRNN3D">QRNN3D (TNNLS'2020)</a></li>
             <li><a href="https://github.com/inria-thoth/T3SC">TS3C (NeurIPS'2021)</a></li>
             <li><a href="https://github.com/Zeqiang-Lai/DPHSIR">GRUNet (Neurocomputing'2021)</a></li>
       </ul>
