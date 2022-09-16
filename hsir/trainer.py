@@ -222,7 +222,7 @@ class Trainer:
             for data in valid_loader:
                 inputs, targets = data['input'].to(self.device), data['target'].to(self.device)
                 outputs = self._eval_step(inputs)
-                if not self.use_2dconv:
+                if len(outputs.shape)==5:
                     outputs = outputs.squeeze(1)
                     targets = targets.squeeze(1)
                 psnr, ssim, sam = MSIQA(outputs, targets)
