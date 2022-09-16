@@ -23,7 +23,7 @@ class HSITestDataset(Dataset):
         self.dataset = MatDataFromFolder(root, size=size)
         self.transform = Compose([
             LoadMatHSI(input_key='input', gt_key='gt',
-                       transform=partial(np.expand_dims, axis=0) if use_chw else None),
+                       transform=None if use_chw else partial(np.expand_dims, axis=0)),
         ])
         self.return_name = return_name
 
