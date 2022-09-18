@@ -6,6 +6,7 @@ from os.path import exists, join
 import imageio
 import numpy as np
 import streamlit as st
+import cv2
 
 BACKGROUND_COLOR = 'white'
 COLOR = 'black'
@@ -92,3 +93,8 @@ def make_grid(rows, cols):
         with st.container():
             grid[i] = st.columns(cols)
     return grid
+
+def encode_image(img):
+    _, encoded_image = cv2.imencode('.png', np.uint8(img.clip(0,1)*255)[:,:,::-1])
+    data = encoded_image.tobytes()
+    return data

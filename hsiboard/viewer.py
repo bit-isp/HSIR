@@ -1,8 +1,9 @@
 import argparse
 from os.path import join
-from hsiboard.box import addbox
 
 from util import *
+from box import *
+
 
 def main(logdir):
 
@@ -25,15 +26,22 @@ def main(logdir):
             ['color', 'gray']
         )
 
-        nrow = st.slider('number of rows', min_value=3, max_value=50, value=9)
-        ncol = st.slider('number of columns', min_value=1, max_value=20, value=6)
-
+        st.header('Box')
         enable_enlarge = st.checkbox('Enlarge')
         crow = st.slider('row coordinate', min_value=0.0, max_value=1.0, value=0.2)
         ccol = st.slider('col coordinate', min_value=0.0, max_value=1.0, value=0.2)
+        selected_box_pos = st.sidebar.selectbox(
+            "Select Box Position",
+            ['Bottom Right', 'Bottom Left', 'Top Right', 'Top Left'],
+        )
 
-    grids = make_grid(nrow, ncol)
+        st.header('Layout')
+        ncol = st.slider('number of columns', min_value=1, max_value=20, value=6)
+
     imgs = load_imgs(join(logdir, selected_method, selected_dataset, selected_vis_type))
+
+    nrow = len(imgs) // ncol + 1
+    grids = make_grid(nrow, ncol)
     details = load_per_image_stat(join(logdir, selected_method, selected_dataset))
     with st.container():
         idx = 0
@@ -41,9 +49,10 @@ def main(logdir):
             name = os.path.splitext(name)[-2]
             if enable_enlarge:
                 h, w = img.shape[:2]
-                img = addbox(img.copy(), (int(h*crow), int(w*ccol)))
+                img = addbox(img.copy(), (int(h * crow), int(w * ccol)),
+                             bbpos=mapbbpox[selected_box_pos])
             ct = grids[idx // ncol][idx % ncol]
-            ct.image(img, caption='%s [%.4f]'% (name, details[name]['MPSNR']))
+            ct.image(img, caption='%s [%.4f]' % (name, details[name]['MPSNR']))
             idx += 1
 
     # stat = load_stat(logdir)
