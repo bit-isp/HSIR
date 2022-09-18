@@ -35,7 +35,7 @@ def eval(net, loader, name, logdir, clamp, bandwise):
 
     with torch.no_grad():
         pbar = tqdm(total=len(loader), dynamic_ncols=True)
-        pbar.set_description(f'Test {name}')
+        pbar.set_description(name)
         for data in loader:
             filename = data['filename'][0]
             basename = tl.utils.filename(filename)
@@ -46,7 +46,7 @@ def eval(net, loader, name, logdir, clamp, bandwise):
             tl.utils.timer.tic()
             outputs = net(inputs)
             torch.cuda.synchronize()
-            run_time = tl.utils.timer.toc()
+            run_time = tl.utils.timer.toc() / 1000
 
             inputs = inputs.squeeze(1)
             outputs = outputs.squeeze(1)
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     save_name = args.arch if args.name is None else args.name
-    logdir = join(args.logdir, args.arch)
+    logdir = join(args.logdir, save_name)
     if exists(logdir):
         print(f'It seems that you have evaluated {args.arch} before.')
         pretty_summary(logdir)
