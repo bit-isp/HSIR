@@ -29,7 +29,6 @@ def eval(net, loader, name, logdir, clamp, bandwise):
     os.makedirs(join(logdir, 'color'), exist_ok=True)
     os.makedirs(join(logdir, 'gray'), exist_ok=True)
 
-    net.eval()
     tracker = tl.trainer.util.MetricTracker()
     detail_stat = {}
 
@@ -44,7 +43,11 @@ def eval(net, loader, name, logdir, clamp, bandwise):
             if clamp:
                 inputs = torch.clamp(inputs, 0., 1.)
             tl.utils.timer.tic()
-            outputs = net(inputs)
+            if isinstance(net, str):
+                outputs = targets if net == 'gt' else inputs
+            else:
+                outputs = net(inputs)
+                
             torch.cuda.synchronize()
             run_time = tl.utils.timer.toc() / 1000
 
@@ -104,12 +107,16 @@ def pretty_summary(logdir):
 
 
 def main(args, logdir):
-    net = tl.utils.instantiate(args.arch)
-    net = net.to(device)
-
-    ckpt = tl.utils.dict_get(torch.load(args.resume), args.key_path)
-    if ckpt is None: print(f'key_path {args.key_path} might be wrong')
-    net.load_state_dict(ckpt)
+    if args.arch == 'gt' or args.arch == 'input':
+        net = args.arch
+    else:
+        net = tl.utils.instantiate(args.arch)
+        net = net.to(device)
+        if args.resume:
+            ckpt = tl.utils.dict_get(torch.load(args.resume), args.key_path)
+            if ckpt is None: print(f'key_path {args.key_path} might be wrong')
+            net.load_state_dict(ckpt)
+        net.eval()
 
     for testset in args.testset:
         testdir = join(args.basedir, testset)
@@ -124,9 +131,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='HSIR Test script')
     parser.add_argument('-a', '--arch', required=True, help='architecture name')
     parser.add_argument('-n', '--name', default=None, help='save name')
-    parser.add_argument('-r', '--resume', required=True, help='checkpoint')
+    parser.add_argument('-r', '--resume', default=None, help='checkpoint')
     parser.add_argument('-t', '--testset', nargs='+', default=['icvl_512_50'], help='testset')
-    parser.add_argument('--basedir', default='data', help='basedir')
+    parser.add_argument('-d', '--basedir', default='data', help='basedir')
     parser.add_argument('--logdir', default='results', help='logdir')
     parser.add_argument('--save_img', action='store_true', help='whether to save image')
     parser.add_argument('--clamp', action='store_true', help='whether clamp input into [0, 1]')
