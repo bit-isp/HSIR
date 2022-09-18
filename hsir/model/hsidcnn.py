@@ -6,15 +6,27 @@ https://github.com/qzhang95/HSID-CNN
 import torch
 import torch.nn as nn
 
+
 def hsid_cnn():
     return HSIDCNN()
 
 
+def hsid_cnn_fast():
+    return HSIDCNN(fast_impl=True)
+
+def hsid_cnn_fast_b6():
+    return HSIDCNN(fast_impl=True, fast_bs=6)
+
+def hsid_cnn_fast_b12():
+    return HSIDCNN(fast_impl=True, fast_bs=12)
+
 class HSIDCNN(nn.Module):
-    def __init__(self, num_adj_bands=12):
+    def __init__(self, num_adj_bands=12, fast_impl=False, fast_bs=4):
         super().__init__()
         self.num_adj_bands = num_adj_bands
-
+        self.fast_impl = fast_impl
+        self.fast_bs = fast_bs
+        
         self.conv_k3 = nn.Conv2d(num_adj_bands * 2, 20, 3, 1, 1)
         self.conv_k5 = nn.Conv2d(num_adj_bands * 2, 20, 5, 1, 2)
         self.conv_k7 = nn.Conv2d(num_adj_bands * 2, 20, 7, 1, 3)
@@ -51,20 +63,41 @@ class HSIDCNN(nn.Module):
         num_bands = x.shape[1]
         outputs = []
 
+        inputs_x, inputs_adj_x = [], []
         for i in range(self.num_adj_bands):
-            output = self._forward(x[:, i:i + 1, :, :], x[:, :self.num_adj_bands * 2, :, :])
-            outputs.append(output)
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(x[:, :self.num_adj_bands * 2, :, :])
+
         for i in range(self.num_adj_bands, num_bands - self.num_adj_bands):
             adj = torch.cat([x[:, i - self.num_adj_bands:i, :, :],
                              x[:, i + 1:i + 1 + self.num_adj_bands, :, :]], dim=1)
-            output = self._forward(x[:, i:i + 1, :, :], adj)
-            outputs.append(output)
-        for i in range(num_bands - self.num_adj_bands, num_bands):
-            output = self._forward(x[:, i:i + 1, :, :], x[:, -self.num_adj_bands * 2:, :, :])
-            outputs.append(output)
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(adj)
 
-        return torch.cat(outputs, dim=1)
+        for i in range(num_bands - self.num_adj_bands, num_bands): 
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(x[:, -self.num_adj_bands * 2:, :, :])
 
+        if self.fast_impl:
+            batch_size = x.shape[0]
+            inputs_x = torch.cat(inputs_x, dim=0)
+            inputs_adj_x = torch.cat(inputs_adj_x, dim=0)
+            outputs = []
+            for i in range(0,num_bands,self.fast_bs):
+                output = self._forward(inputs_x[i:i+self.fast_bs], inputs_adj_x[i:i+self.fast_bs])
+                outputs.append(output)
+            outputs = torch.cat(outputs, dim=0)
+            outputs_batch = []
+            for i in range(batch_size):
+                outputs_batch.append(outputs[i::batch_size])
+            return torch.cat(outputs_batch, dim=0).transpose(0,1)
+        else:
+            for i in range(num_bands):
+                output = self._forward(inputs_x[i], inputs_adj_x[i])
+                outputs.append(output)
+            return torch.cat(outputs, dim=1)
+        
+    
     def _forward(self, x, adj_x):
         feat3 = self.conv_k3(adj_x)
         feat5 = self.conv_k5(adj_x)

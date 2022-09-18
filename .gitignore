@@ -1,5 +1,7 @@
 checkpoints
 results
+model_zoo
+data 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

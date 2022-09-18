@@ -4,3 +4,4 @@ from . import grunet
 from . import restormer
 from . import uformer
 from . import unet3d
+from . import hsidcnn
