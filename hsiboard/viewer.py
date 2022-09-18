@@ -6,7 +6,7 @@ from box import *
 
 
 def main(logdir):
-
+    set_page_container_style()
     with st.sidebar:
         st.title('HSIR Board')
         st.subheader('Viewer')
@@ -55,9 +55,6 @@ def main(logdir):
             ct.image(img, caption='%s [%.4f]' % (name, details[name]['MPSNR']))
             idx += 1
 
-    # stat = load_stat(logdir)
-    # st.header(selected_method)
-    # st.table(stat[selected_method])
 
 
 if __name__ == '__main__':
@@ -65,5 +62,4 @@ if __name__ == '__main__':
     parser.add_argument('--logdir', default='results')
     args = parser.parse_args()
 
-    set_page_container_style(max_width_100_percent=True)
     main(args.logdir)

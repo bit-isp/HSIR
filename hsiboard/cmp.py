@@ -11,7 +11,7 @@ from box import *
 
 
 def main(logdir):
-
+    set_page_container_style()
     with st.sidebar:
         st.title('HSIR Board')
         st.subheader('Comparator')
@@ -120,5 +120,4 @@ if __name__ == '__main__':
     parser.add_argument('--logdir', default='results')
     args = parser.parse_args()
 
-    set_page_container_style()
     main(args.logdir)
