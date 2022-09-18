@@ -48,6 +48,7 @@ def eval(net, loader, name, logdir, clamp, bandwise):
             torch.cuda.synchronize()
             run_time = tl.utils.timer.toc() / 1000
 
+            outputs = outputs.clamp(0,1)
             inputs = inputs.squeeze(1)
             outputs = outputs.squeeze(1)
             targets = targets.squeeze(1)
