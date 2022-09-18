@@ -12,8 +12,8 @@ COLOR = 'black'
 
 
 def set_page_container_style(
-    max_width: int = 1100, max_width_100_percent: bool = False,
-    padding_top: int = 4, padding_right: int = 2, padding_left: int = 2, padding_bottom: int = 10,
+    max_width: int = 1100, max_width_100_percent: bool = True,
+    padding_top: int = 2, padding_right: int = 2, padding_left: int = 2, padding_bottom: int = 10,
     color: str = COLOR, background_color: str = BACKGROUND_COLOR,
 ):
     if max_width_100_percent:
@@ -23,7 +23,7 @@ def set_page_container_style(
     st.markdown(
         f'''
             <style>
-                .reportview-container .sidebar-content {{
+                .appview-container .css-1adrfps {{
                     padding-top: {padding_top}rem;
                 }}
                 .appview-container .main .block-container {{

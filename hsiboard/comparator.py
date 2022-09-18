@@ -90,5 +90,5 @@ if __name__ == '__main__':
     parser.add_argument('--logdir', default='results')
     args = parser.parse_args()
 
-    set_page_container_style(max_width_100_percent=True)
+    set_page_container_style()
     main(args.logdir)
