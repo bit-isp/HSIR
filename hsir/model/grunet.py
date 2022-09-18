@@ -6,7 +6,7 @@ from .qrnn3d.qrnn import QRNNConv3D, QRNNUpsampleConv3d, BiQRNNConv3D, BiQRNNDeC
 
 
 class conv_block(nn.Module):
-    def __init__(self, in_ch, out_ch, bn=True):
+    def __init__(self, in_ch, out_ch, bn=False):
         super(conv_block, self).__init__()
 
         self.conv1 = QRNNConv3D(in_ch, out_ch, bn=bn)
@@ -20,7 +20,7 @@ class conv_block(nn.Module):
 
 
 class deconv_block(nn.Module):
-    def __init__(self, in_ch, out_ch, bn=True):
+    def __init__(self, in_ch, out_ch, bn=False):
         super(deconv_block, self).__init__()
 
         self.conv1 = QRNNDeConv3D(in_ch, out_ch, bn=bn)
@@ -34,7 +34,7 @@ class deconv_block(nn.Module):
 
 
 class GRUnet(nn.Module):
-    def __init__(self, in_ch=1, out_ch=1, use_noise_map=False, bn=True):
+    def __init__(self, in_ch=1, out_ch=1, use_noise_map=False, bn=False):
         super(GRUnet, self).__init__()
         self.use_2dconv = False
         self.bandwise = False
@@ -112,13 +112,5 @@ def grunet():
     return GRUnet()
 
 
-def grunet_nobn():
-    return GRUnet(bn=False)
-
-
 def grunet_noise_map():
     return GRUnet(in_ch=2, use_noise_map=True)
-
-
-def grunet_nobn_noise_map():
-    return GRUnet(in_ch=2, use_noise_map=True, bn=False)

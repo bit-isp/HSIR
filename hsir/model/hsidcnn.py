@@ -6,6 +6,7 @@ https://github.com/qzhang95/HSID-CNN
 import torch
 import torch.nn as nn
 
+
 def hsid_cnn():
     return HSIDCNN()
 
@@ -15,6 +16,7 @@ class HSIDCNN(nn.Module):
         super().__init__()
         self.num_adj_bands = num_adj_bands
 
+        
         self.conv_k3 = nn.Conv2d(num_adj_bands * 2, 20, 3, 1, 1)
         self.conv_k5 = nn.Conv2d(num_adj_bands * 2, 20, 5, 1, 2)
         self.conv_k7 = nn.Conv2d(num_adj_bands * 2, 20, 7, 1, 3)
@@ -51,20 +53,27 @@ class HSIDCNN(nn.Module):
         num_bands = x.shape[1]
         outputs = []
 
+        inputs_x, inputs_adj_x = [], []
         for i in range(self.num_adj_bands):
-            output = self._forward(x[:, i:i + 1, :, :], x[:, :self.num_adj_bands * 2, :, :])
-            outputs.append(output)
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(x[:, :self.num_adj_bands * 2, :, :])
+
         for i in range(self.num_adj_bands, num_bands - self.num_adj_bands):
             adj = torch.cat([x[:, i - self.num_adj_bands:i, :, :],
                              x[:, i + 1:i + 1 + self.num_adj_bands, :, :]], dim=1)
-            output = self._forward(x[:, i:i + 1, :, :], adj)
-            outputs.append(output)
-        for i in range(num_bands - self.num_adj_bands, num_bands):
-            output = self._forward(x[:, i:i + 1, :, :], x[:, -self.num_adj_bands * 2:, :, :])
-            outputs.append(output)
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(adj)
 
+        for i in range(num_bands - self.num_adj_bands, num_bands): 
+            inputs_x.append(x[:, i:i + 1, :, :])
+            inputs_adj_x.append(x[:, -self.num_adj_bands * 2:, :, :])
+
+        for i in range(num_bands):
+            output = self._forward(inputs_x[i], inputs_adj_x[i])
+            outputs.append(output)
         return torch.cat(outputs, dim=1)
-
+        
+    
     def _forward(self, x, adj_x):
         feat3 = self.conv_k3(adj_x)
         feat5 = self.conv_k5(adj_x)

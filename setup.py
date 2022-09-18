@@ -7,6 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 packages = find_packages()
 packages.append('hsirun')
+packages.append('hsiboard')
 
 setup(
     name='hsir',
@@ -15,7 +16,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/Zeqiang-Lai/HSIR',
     packages=packages,
-    package_dir={'hsir': 'hsir', 'hsirrun':'hsirrun'},
+    package_dir={'hsir': 'hsir', 'hsirrun':'hsirrun', 'hsiboard': 'hsiboard'},
     version='0.0.1',
     include_package_data=True,
     install_requires=['tqdm', 'qqdm', 'timm'],
