@@ -31,6 +31,8 @@ denoise_restormer = TrainSchedule(
     },
 )
 
+denoise_hsid_cnn = denoise_restormer
+
 denoise_complex_default = TrainSchedule(
     max_epochs=110,
     base_lr=1e-3,
@@ -42,3 +44,16 @@ denoise_complex_default = TrainSchedule(
         105: 1e-5,
     },
 )
+
+denoise_complex_restormer = TrainSchedule(
+    max_epochs=110,
+    base_lr=1e-4,
+    lr_schedule={
+        80: 1e-4,
+        95: 5e-5,
+        100: 1e-5,
+        105: 1e-6,
+    },
+)
+
+denoise_complex_hsid_cnn = denoise_complex_restormer
