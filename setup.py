@@ -12,6 +12,7 @@ packages.append('hsiboard')
 setup(
     name='hsir',
     description="Hyperspectral Image Restoration Toolbox",
+    author="Zeqiang Lai , Kaixuan Wei and Ying Fu"
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/Zeqiang-Lai/HSIR',
