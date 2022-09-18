@@ -161,6 +161,7 @@ class Trainer:
         tracker = MetricTracker()
 
         if warm_up:
+            self.logger.log('Use warmup_scheduler')
             from warmup_scheduler import GradualWarmupScheduler
             scheduler_warmup = GradualWarmupScheduler(
                 self.optimizer,
