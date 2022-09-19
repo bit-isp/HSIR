@@ -81,6 +81,6 @@ def complex_loader_train(root, use_chw=False):
 
 
 def complex_loader_val(root, use_chw=False):
-    dataset = HSITestDataset(root, use_chw=use_chw)
+    dataset = HSITestDataset(root, use_chw=use_chw, size=5)
     loader = D.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
     return loader
