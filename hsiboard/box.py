@@ -56,9 +56,14 @@ def addbox_with_diff(input, gt, pt, vmax=0.1, size=100,
                      thickness=1,
                      bbthickness=2,
                      sep=5):
-
-    H, W, C = input.shape
-
+    if len(input.shape) == 2:
+        input = np.expand_dims(input, -1)
+    if len(gt.shape) == 2:
+        gt = np.expand_dims(gt, -1)
+        
+    H, W = input.shape[:2]
+    C = 3
+    
     out = np.zeros((H, W + H // 2 + sep, C))
     out[:, :W] = input
 
@@ -69,15 +74,18 @@ def addbox_with_diff(input, gt, pt, vmax=0.1, size=100,
 
     # crop.
     bbsize = H // 2
-    crop_img = input[pt[1]:pt[1] + size, pt[0]:pt[0] + size]
+    crop_img = input[pt[1]:pt[1] + size, pt[0]:pt[0] + size, :]
     crop_img = cv2.resize(crop_img, (bbsize, bbsize))
 
     # diff
-    diff = convert_color(np.abs(input-gt)[:,:,1], vmin=0, vmax=vmax)
+    diff = convert_color(np.abs(input-gt)[:,:,0], vmin=0, vmax=vmax)
 
-    crop_img_diff = diff[pt[1]:pt[1] + size, pt[0]:pt[0] + size]
+    crop_img_diff = diff[pt[1]:pt[1] + size, pt[0]:pt[0] + size, :]
     crop_img_diff = cv2.resize(crop_img_diff, (bbsize, bbsize))
 
+    if len(crop_img.shape) == 2: crop_img = np.expand_dims(crop_img, axis=-1)
+    if len(crop_img_diff.shape) == 2: crop_img_diff = np.expand_dims(crop_img_diff, axis=-1)
+    
     out[:H // 2, W+sep:W+sep + H // 2, :] = crop_img
     out[H // 2:, W+sep:W+sep + H // 2, :] = crop_img_diff
 
