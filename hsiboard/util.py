@@ -96,7 +96,7 @@ def make_grid(rows, cols):
 
 def encode_image(img):
     img = np.uint8(img.clip(0,1)*255)
-    if len(img) == 3: img = img[:,:,::-1]
+    if len(img.shape) == 3: img = img[:,:,::-1]
     _, encoded_image = cv2.imencode('.png', img)
     data = encoded_image.tobytes()
     return data
