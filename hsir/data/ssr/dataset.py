@@ -67,6 +67,7 @@ class TrainDataset(Dataset):
         #     names = [n.strip() for n in f.readlines()]
         names = [n.split('.')[0] for n in os.listdir(hsi_root) if n.endswith('.mat')]
         names.sort()
+        random.shuffle(names)
         if size is not None: names = names[:size]
 
         for name in tqdm(names, desc='Load data to memory'):
@@ -74,7 +75,7 @@ class TrainDataset(Dataset):
             rgb_path = os.path.join(rgb_root, name + '.jpg')
             try:
                 hsi = np.float32(loadmat(hsi_path)['cube'])
-            except CantReadError:
+            except NotImplementedError:
                 print('fail to load', hsi_path)
                 continue
             hsi = np.transpose(hsi, [2, 0, 1])
