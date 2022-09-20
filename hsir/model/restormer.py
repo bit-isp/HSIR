@@ -529,13 +529,26 @@ def restormer_b31():
     net = Restormer(31, 31)
     return net
 
+
+def restormer_b31_d32():
+    net = Restormer(31, 31, dim=32)
+    return net
+
+
+def restormer_b31_d24():
+    net = Restormer(31, 31, dim=24)
+    return net
+
+
 def restormer_b31_d12():
     net = Restormer(31, 31, dim=12)
     return net
 
+
 def restormer_b31_d6():
     net = Restormer(31, 31, dim=6)
     return net
+
 
 def restormer_ssr():
     net = Restormer(3, 31)
@@ -543,5 +556,5 @@ def restormer_ssr():
 
 
 def restormer_b31_tlc():
-    net = RestormerLocal(31, 31, train_size=(1, 31, 64, 64), base_size=(64,64))
+    net = RestormerLocal(31, 31, train_size=(1, 31, 64, 64), base_size=(64, 64))
     return net
