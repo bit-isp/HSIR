@@ -33,6 +33,33 @@ denoise_restormer = TrainSchedule(
 
 denoise_hsid_cnn = denoise_restormer
 
+denoise_swinir = TrainSchedule(
+    max_epochs=80,
+    base_lr=2e-4,
+    lr_schedule={
+        0: 2e-4,
+        17: 1e-4,
+        22: 5e-5,
+        30: 1e-4,
+        50: 1e-5,
+        60: 5e-6,
+        70: 1e-6,
+    },
+)
+
+denoise_uformer = TrainSchedule(
+    max_epochs=80,
+    base_lr=2e-4,
+    lr_schedule={
+        0: 2e-4,
+        17: 1e-4,
+        40: 5e-5,
+        50: 1e-5,
+        60: 5e-6,
+        70: 1e-6,
+    },
+)
+
 denoise_complex_default = TrainSchedule(
     max_epochs=110,
     base_lr=1e-3,
