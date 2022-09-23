@@ -111,11 +111,11 @@ class ConvBlock(nn.Module):
 
 
 class UNet(nn.Module):
-    def __init__(self, block=ConvBlock, dim=32):
+    def __init__(self, ch=3, block=ConvBlock, dim=32):
         super(UNet, self).__init__()
 
         self.dim = dim
-        self.ConvBlock1 = ConvBlock(3, dim, strides=1)
+        self.ConvBlock1 = ConvBlock(ch, dim, strides=1)
         self.pool1 = nn.Conv2d(dim, dim, kernel_size=4, stride=2, padding=1)
 
         self.ConvBlock2 = block(dim, dim * 2, strides=1)
@@ -141,7 +141,7 @@ class UNet(nn.Module):
         self.upv9 = nn.ConvTranspose2d(dim * 2, dim, 2, stride=2)
         self.ConvBlock9 = block(dim * 2, dim, strides=1)
 
-        self.conv10 = nn.Conv2d(dim, 3, kernel_size=3, stride=1, padding=1)
+        self.conv10 = nn.Conv2d(dim, ch, kernel_size=3, stride=1, padding=1)
 
     def forward(self, x):
         conv1 = self.ConvBlock1(x)
@@ -204,6 +204,9 @@ class UNet(nn.Module):
         flops += H * W * self.dim * 3 * 3 * 3
         return flops
 
+
+def unet_b31():
+    return UNet(31)
 
 class LPU(nn.Module):
     """
