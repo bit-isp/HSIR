@@ -19,6 +19,20 @@ denoise_default = TrainSchedule(
     },
 )
 
+denoise_unet = TrainSchedule(
+    max_epochs=80,
+    base_lr=2e-4,
+    lr_schedule={
+        0: 2e-4,
+        20: 1e-4,
+        30: 2e-4,
+        40: 1e-4,
+        50: 5e-5,
+        60: 1e-5,
+        70: 5e-6,
+    },
+)
+
 denoise_restormer = TrainSchedule(
     max_epochs=80,
     base_lr=1e-4,
@@ -59,6 +73,33 @@ denoise_uformer = TrainSchedule(
         70: 1e-6,
     },
 )
+
+
+denoise_complex_uformer = TrainSchedule(
+    max_epochs=110,
+    base_lr=1e-4,
+    lr_schedule={
+        80: 1e-4,
+        85: 5e-5,
+        90: 1e-5,
+        95: 5e-6,
+        100: 1e-6
+    },
+)
+
+
+denoise_complex_swinir = TrainSchedule(
+    max_epochs=110,
+    base_lr=1e-4,
+    lr_schedule={
+        80: 1e-4,
+        85: 5e-5,
+        90: 1e-5,
+        95: 5e-6,
+        100: 1e-6
+    },
+)
+
 
 denoise_complex_default = TrainSchedule(
     max_epochs=110,
