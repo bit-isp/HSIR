@@ -16,7 +16,10 @@ def main(logdir):
         )
 
     stat = load_stat(logdir)
-
+    
+    st.subheader('Not loaded')
+    st.text(set(selected_methods)-set(stat.keys()))
+    
     if len(selected_methods) == 1:
         selected_method = selected_methods[0]
         print(stat[selected_method][0])
@@ -24,7 +27,7 @@ def main(logdir):
         st.dataframe(stat[selected_method])
     else:
         table = {}
-        for m in selected_methods:
+        for m in stat.keys():
             for d in stat[m]:
                 row = {'Method': m}
                 for k, v in d.items():

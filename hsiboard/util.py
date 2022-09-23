@@ -68,8 +68,11 @@ def load_method_stat(logdir):
 def load_stat(logdir):
     total_stat = {}
     for folder in listdir(logdir, exclude=['gt']):
-        stat = load_method_stat(join(logdir, folder))
-        total_stat[folder] = stat
+        try:
+            stat = load_method_stat(join(logdir, folder))
+            total_stat[folder] = stat
+        except:
+            print('error loading', folder, 'ignored')
     return total_stat
 
 def load_per_image_stat(logdir):
