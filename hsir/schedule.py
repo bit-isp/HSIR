@@ -33,6 +33,16 @@ denoise_unet = TrainSchedule(
     },
 )
 
+denoise_grunet = TrainSchedule(
+    max_epochs=80,
+    base_lr=1e-4,
+    lr_schedule={
+        45: 5e-5,
+        60: 1e-5,
+        70: 5e-6,
+    },
+)
+
 denoise_restormer = TrainSchedule(
     max_epochs=80,
     base_lr=1e-4,
