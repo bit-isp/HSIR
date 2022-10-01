@@ -42,7 +42,7 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
         <b>Super Resolution</b>
       </td>
       <td>
-        <b>Spectral Compressive Imaging</b>
+        <b>Compressive Sensing</b>
       </td>
       <td>
         <b>Spectral Reconstruction</b>
@@ -81,6 +81,17 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
         </ul>
       </td>
       <td>
+        <ul>
+          <li><a href="#">MST++ (CVPRW'2022)</a></li>
+          <li><a href="#">MST (CVPR'2022)</a></li>
+          <li><a href="#">HDNet (CVPR'2022)</a></li>
+          <li><a href="#">MPRNet (CVPR'2021)</a></li>
+          <li><a href="#">HINet (ECCV'2020)</a></li>
+          <li><a href="#">AWAN (CVPRW'2020)</a></li>
+          <li><a href="#">HRNet (CVPRW'2020)</a></li>
+          <li><a href="#">HSCNN+ (CVPRW'2018)</a></li>
+          <li><a href="#">EDSR (CVPRW'2017)</a></li>
+        </ul>
       </td>
     </tr>
 </td>
