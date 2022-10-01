@@ -140,11 +140,12 @@ if __name__ == '__main__':
     parser.add_argument('-kp', '--key_path', default='net', help='key path to access network state_dict in ckpt')
     parser.add_argument('--bandwise', action='store_true')
     parser.add_argument('--use-conv2d', action='store_true')
+    parser.add_argument('--force-run', action='store_true')
     args = parser.parse_args()
 
     save_name = args.arch if args.name is None else args.name
     logdir = join(args.logdir, save_name)
-    if exists(logdir):
+    if exists(logdir) and not args.force_run:
         print(f'It seems that you have evaluated {args.arch} before.')
         pretty_summary(logdir)
         action = input('Are you sure you want to continue? (y) continue (n) exit\n')
