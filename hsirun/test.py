@@ -25,7 +25,6 @@ def bchw2hwc(x):
 
 
 def eval(net, loader, name, logdir, clamp, bandwise):
-    print('Evaluating {}'.format(name))
     os.makedirs(join(logdir, 'color'), exist_ok=True)
     os.makedirs(join(logdir, 'gray'), exist_ok=True)
 
@@ -49,7 +48,7 @@ def eval(net, loader, name, logdir, clamp, bandwise):
                 outputs = net(inputs)
                 
             torch.cuda.synchronize()
-            run_time = tl.utils.timer.toc() / 1000
+            run_time = float(tl.utils.timer.toc()) / 1000
 
             outputs = outputs.clamp(0,1)
             inputs = inputs.squeeze(1)
@@ -119,6 +118,9 @@ def main(args, logdir):
         net.eval()
 
     for testset in args.testset:
+        print('Evaluating {}'.format(args.arch))
+        print('On {}'.format(testset))
+        print('With {}'.format(args.resume))
         testdir = join(args.basedir, testset)
         dataset = HSITestDataset(testdir, use_chw=args.use_conv2d, return_name=True)
         loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
