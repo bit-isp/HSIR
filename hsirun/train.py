@@ -17,14 +17,14 @@ def train_cfg():
     parser.add_argument('--name', '-n', type=str, default=None,
                         help='name of the experiment, if not specified, arch will be used.')
     parser.add_argument('--lr', type=float, default=None)
-    parser.add_argument('--schedule', type=str, default='hsir.schedule.denoise_default')
-    parser.add_argument('--resume', '-r', action='store_true')
+    parser.add_argument('-s', '--schedule', type=str, default='hsir.schedule.denoise_default')
+    parser.add_argument('--resume', '-r', type=str, default=None)
     parser.add_argument('--bandwise', action='store_true')
     parser.add_argument('--use-conv2d', action='store_true')
-    parser.add_argument('--resume-path', '-rp', type=str, default=None)
     parser.add_argument('--train-root', type=str, default='data/ICVL64_31_100.db')
     parser.add_argument('--test-root', type=str, default='data')
     parser.add_argument('--save-root', type=str, default='checkpoints')
+    parser.add_argument('--save-freq', type=int, default=10)
     parser.add_argument('--gpu-ids', type=str, default='0', help='gpu ids')
     cfg = parser.parse_args()
     cfg.gpu_ids = [int(id) for id in cfg.gpu_ids.split(',')]
@@ -44,7 +44,7 @@ def main():
         bandwise=cfg.bandwise,
     )
     trainer.logger.print(cfg)
-    if cfg.resume: trainer.load(cfg.resume_path)
+    if cfg.resume: trainer.load(cfg.resume)
 
     # preare dataset
     if cfg.noise == 'gaussian':
@@ -60,7 +60,7 @@ def main():
     """Main loop"""
     if cfg.lr: adjust_learning_rate(trainer.optimizer, cfg.lr)  # override lr
     lr_scheduler = MultiStepSetLR(trainer.optimizer, schedule.lr_schedule, epoch=trainer.epoch)
-    epoch_per_save = 10
+    epoch_per_save = cfg.save_freq
     best_psnr = 0
     while trainer.epoch < schedule.max_epochs:
         np.random.seed()  # reset seed per epoch, otherwise the noise will be added with a specific pattern
