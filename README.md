@@ -19,8 +19,8 @@ pip install hsir
 Here are some runable examples, please refer to the code for more options.
 
 ```shell
-python hsirun/train.py -a qrnn3d.qrnn3d
-python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
+python hsirun.train -a qrnn3d.qrnn3d
+python hsirun.test -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 ```
 
 ## Benchmark
@@ -32,27 +32,14 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 
 <details>
 <summary>Supported Models</summary>
-<table align="center">
-  <tbody>
-    <tr align="center" valign="bottom">
-      <td>
-        <b>Denoising</b>
-      </td>
-    </tr>
-    <tr valign="top">
-      <td>
-        <ul>
-            <li><a href="https://github.com/qzhang95/HSID-CNN">HSID-CNN (TGRS'2018)</a></li>
-            <li><a href="https://github.com/Vandermode/QRNN3D">QRNN3D (TNNLS'2020)</a></li>
-            <li><a href="https://github.com/inria-thoth/T3SC">TS3C (NeurIPS'2021)</a></li>
-            <li><a href="https://github.com/Zeqiang-Lai/DPHSIR">GRUNet (Neurocomputing'2021)</a></li>
-      </ul>
-      </td>
-    </tr>
-</td>
-    </tr>
-  </tbody>
-</table>
+
+<br>
+
+- [HSID-CNN](https://github.com/qzhang95/HSID-CNN) (TGRS'2018)
+- [QRNN3D](https://github.com/Vandermode/QRNN3D) (TNNLS'2020)
+- [TS3C](https://github.com/inria-thoth/T3SC) (NeurIPS'2021)
+- [GRUNet](https://github.com/Zeqiang-Lai/DPHSIR) (Neurocomputing'2021)
+
 </details>
 
 <details>
