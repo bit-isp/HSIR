@@ -38,15 +38,6 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
       <td>
         <b>Denoising</b>
       </td>
-      <td>
-        <b>Super Resolution</b>
-      </td>
-      <td>
-        <b>Compressive Sensing</b>
-      </td>
-      <td>
-        <b>Spectral Reconstruction</b>
-      </td>
     </tr>
     <tr valign="top">
       <td>
@@ -56,42 +47,6 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
             <li><a href="https://github.com/inria-thoth/T3SC">TS3C (NeurIPS'2021)</a></li>
             <li><a href="https://github.com/Zeqiang-Lai/DPHSIR">GRUNet (Neurocomputing'2021)</a></li>
       </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="#">Bi3DQRNN (JStar'2021)</a></li>
-          <li><a href="#">SSPSR (TCI'2020)</a></li>
-          <li><a href="#">MCNet (Remote Sense'2020)</a></li>
-          <li><a href="#">IFN (TGRS'2020)</a></li>
-          <li><a href="#">3D-FCNN (Remote Sense'2017)</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="#">MST (CVPR'2022)</a></li>
-          <li><a href="#">CST (ECCV'2022)</a></li>
-          <li><a href="#">MST++ (CVPRW'2022)</a></li>
-          <li><a href="#">HDNET (CVPR'2022)</a></li>
-          <li><a href="#">BIRNAT (TPAMI'2022)</a></li>
-          <li><a href="#">DGSMP (CVPR'2021)</a></li>
-          <li><a href="#">GAP-Net (arxiv'2020)</a></li>
-          <li><a href="#">TSA-Net (ECCV'2020)</a></li>
-          <li><a href="#">ADMM-Net (ICCV'2019)</a></li>
-          <li><a href="#">λ-Net (ICCV'2019)</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="#">MST++ (CVPRW'2022)</a></li>
-          <li><a href="#">MST (CVPR'2022)</a></li>
-          <li><a href="#">HDNet (CVPR'2022)</a></li>
-          <li><a href="#">MPRNet (CVPR'2021)</a></li>
-          <li><a href="#">HINet (ECCV'2020)</a></li>
-          <li><a href="#">AWAN (CVPRW'2020)</a></li>
-          <li><a href="#">HRNet (CVPRW'2020)</a></li>
-          <li><a href="#">HSCNN+ (CVPRW'2018)</a></li>
-          <li><a href="#">EDSR (CVPRW'2017)</a></li>
-        </ul>
       </td>
     </tr>
 </td>
