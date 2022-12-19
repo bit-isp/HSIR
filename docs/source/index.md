@@ -56,15 +56,11 @@ python hsirun/test.py -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 If you find this repo helpful, please considering citing us.
 
 ```bibtex
-@article{LAI2022281,
-    title = {Deep plug-and-play prior for hyperspectral image restoration},
-    journal = {Neurocomputing},
-    volume = {481},
-    pages = {281-293},
-    year = {2022},
-    issn = {0925-2312},
-    doi = {https://doi.org/10.1016/j.neucom.2022.01.057},
-    author = {Zeqiang Lai and Kaixuan Wei and Ying Fu},
+@misc{hsir,
+    author={Zeqiang Lai, Miaoyu Li, Ying Fu},
+    title={HSIR: Out-of-box Hyperspectral Image Restoration Toolbox},
+    year={2022},
+    url={https://github.com/bit-isp/HSIR},
 }
 ```
 
