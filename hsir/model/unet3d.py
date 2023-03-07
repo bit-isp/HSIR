@@ -32,10 +32,10 @@ class conv_block(nn.Module):
         return x
 
 class U_Net_3D(nn.Module):
-    def __init__(self, in_ch=1, out_ch=1):
+    def __init__(self, in_ch=1, out_ch=1, dim=32):
         super(U_Net_3D, self).__init__()
 
-        n1 = 32
+        n1 = dim
         filters = [n1, n1 * 2, n1 * 4, n1 * 8, n1 * 16]
         
         self.Down1 = nn.Conv3d(filters[0], filters[0], kernel_size=[1,4,4], stride=[1,2,2], padding=[0,1,1], bias=True)
@@ -101,6 +101,12 @@ class U_Net_3D(nn.Module):
     
 def unet3d():
     net = U_Net_3D()
+    net.use_2dconv = False
+    net.bandwise = False
+    return net
+
+def unet3d_m():
+    net = U_Net_3D(dim=16)
     net.use_2dconv = False
     net.bandwise = False
     return net
