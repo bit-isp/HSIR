@@ -26,7 +26,7 @@ python hsirun.test -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 ## Benchmark
 
 [Pretrained Models](https://1drv.ms/u/s!AuS3o7sEiuJnf6F4THmqDMtDCwQ?e=JpfLP3) | [Training Log](https://pan.baidu.com/s/1OiuTArnqhjQmkCdehpmelQ) | [Datasets](https://pan.baidu.com/s/1BkNYhb9CBtXnKsQjNwYFyg) 
-
+<br>
 <sub>*Baidu Drive's Share Code=HSIR*</sub>
 
 
@@ -39,7 +39,11 @@ python hsirun.test -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 - [QRNN3D](https://github.com/Vandermode/QRNN3D) (TNNLS'2020)
 - [TS3C](https://github.com/inria-thoth/T3SC) (NeurIPS'2021)
 - [GRUNet](https://github.com/Zeqiang-Lai/DPHSIR) (Neurocomputing'2021)
-
+- [TRQ3D](https://github.com/LiPang/TRQ3DNet) (Remote Sensing'2022)
+- [SST](https://github.com/MyuLi/SST) (AAAI'2022)
+- [SERT](https://github.com/MyuLi/SERT) (CVPR'2023)
+- [MAN](https://github.com/Zeqiang-Lai/MAN) (arXiv'2023)
+- [HSDT](https://github.com/Zeqiang-Lai/HSDT) (arXiv'2023)
 </details>
 
 <details>
@@ -525,12 +529,6 @@ python hsirun.test -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 </table>
 </details>
 
-## Acknowledgement
-
-- [QRNN3D](https://github.com/Vandermode/QRNN3D)
-- [DPHSIR](https://github.com/Zeqiang-Lai/DPHSIR)
-- [MST](https://github.com/caiyuanhao1998/MST)
-- [TLC](https://github.com/megvii-research/TLC)
 
 ## Citation
 
