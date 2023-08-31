@@ -43,7 +43,7 @@ python hsirun.test -a qrnn3d.qrnn3d -r qrnn3d.pth -t icvl_512_50
 - [SST](https://github.com/MyuLi/SST) (AAAI'2022)
 - [SERT](https://github.com/MyuLi/SERT) (CVPR'2023)
 - [MAN](https://github.com/Zeqiang-Lai/MAN) (arXiv'2023)
-- [HSDT](https://github.com/Zeqiang-Lai/HSDT) (arXiv'2023)
+- [HSDT](https://github.com/Zeqiang-Lai/HSDT) (ICCV'2023)
 </details>
 
 <details>
